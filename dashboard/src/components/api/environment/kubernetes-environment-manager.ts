@@ -410,7 +410,11 @@ export class KubernetesEnvironmentManager extends EnvironmentManager {
    */
   createMachine(environment: che.IWorkspaceEnvironment, image?: string): IEnvironmentManagerMachine {
     const uniqueMachineName = this.getUniqueMachineName(environment);
-    const [podName, containerName] = this.splitName(uniqueMachineName);
+    let [podName, containerName] = this.splitName(uniqueMachineName);
+    if(!containerName) {
+      podName = 'new-pod';
+      containerName = uniqueMachineName;
+    }
     const machineImage = !image ? 'rhche/centos_jdk8:latest' : image;
 
     return {
